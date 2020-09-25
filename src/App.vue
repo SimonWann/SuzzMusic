@@ -1,32 +1,35 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    
+    <player></player>
+    <song-info></song-info>
+    <category></category>
+    <song v-show="this.$store.state.isSong"></song>
+    <comment-area v-show="!this.$store.state.isSong"></comment-area>
   </div>
 </template>
+<script>
+import player from './components/player'
+import songInfo from './components/songInfo'
+import category from './components/category'
+import song from './components/song'
+import commentArea from './components/commentArea'
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+export default {
+  components: {
+    player,
+    songInfo,
+    category,
+    song,
+    commentArea
   }
 }
+</script>
+<style lang="less">
+  #app{
+    width:600px;
+    height: 800px;
+    margin: 0 auto;
+    
+  }
 </style>
