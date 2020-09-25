@@ -37,6 +37,12 @@ export default {
             this.cUrl = this.$store.state.sdetaillist[this.cindex].id
             this.$store.dispatch('getcuUrl',this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
+            this.$store.commit('checkFavorite',false)
+            for(let item of this.$store.state.favoriteList){
+                if( this.cUrl == item ){
+                    this.$store.commit('checkFavorite',true)
+                }
+            }
         }
     }
 }

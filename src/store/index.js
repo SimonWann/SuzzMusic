@@ -38,7 +38,10 @@ export default new Vuex.Store({
     comList: {
       hotComments: [{user: {avatarUrl: '#', nickname: '###'},content: '#####'}],
       comments: [{user: {avatarUrl: '#', nickname: '###'},content: '#####'}]
-    }
+    },
+    dailySong: [],
+    isFavorite: false,
+    favoriteList: []
   },
   mutations: {
     login(state,payload) {
@@ -74,7 +77,7 @@ export default new Vuex.Store({
       state.isPlay = true
     },
     currentSong(state,payload) {
-      // console.log(payload)
+      console.log(payload)
       state.currentS = payload
     },
     changeLyric(state,payload) {
@@ -98,6 +101,18 @@ export default new Vuex.Store({
         hotComments: payload.data.hotComments
       }
       console.log(state.comList)
+    },
+    updateDaily(state,payload){
+      state.dailySong = payload.data.data.dailySongs
+      
+    },
+    updateFavorite(state,payload) {
+      state.favoriteList = payload.data.ids
+      console.log(state.favoriteList)
+    },
+    checkFavorite(state,payload) {
+      console.log('favorite:'+payload)
+      state.isFavorite = payload
     }
   },
   actions: {
@@ -108,9 +123,21 @@ export default new Vuex.Store({
       })
     .then(resolve1 => {
       context.commit('login',resolve1)
-      
       return new Promise((resolve) => {
         // console.log(resolve1)
+        instance1({
+          url: '/recommend/songs'
+        }).then(resolveds => {
+          context.commit('updateDaily',resolveds)
+        })
+        instance1({
+          url: '/likelist',
+          params: {
+            uid: resolve1.data.account.id
+          }
+        }).then((resolvefa) => {
+          context.commit('updateFavorite',resolvefa)
+        })
         instance1({
           url: '/user/playlist',
           params: {
@@ -181,6 +208,23 @@ export default new Vuex.Store({
       }).then(resolve1 => {
         context.commit('toggleCom',resolve1)
       })
+    },
+    getDailySong(context,payload) {
+      context.state.ids.length = 0
+      context.state.ids = context.state.dailySong.map((current,index) => {
+        return current.id
+      })
+      instance1({
+        url: 'song/detail',
+        params: {
+          ids: context.state.ids.toString()
+        }
+      }).then(resolve => {
+        context.commit('detailSong',resolve)
+      })
+    },
+    getFavoriteSong(context,payload) {
+      
     }
     
   },

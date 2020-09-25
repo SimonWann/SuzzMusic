@@ -5,6 +5,10 @@
                 <h3>{{item.user.nickname}}</h3>
                 <p>{{item.content}}</p>
             </a>
+            <a v-for="(item,index) in conList.comments" class="list-group-item list-group-item-success" :class="colorClass[index%4]">
+                <h3>{{item.user.nickname}}</h3>
+                <p>{{item.content}}</p>
+            </a>
         </div>
         
     </div>

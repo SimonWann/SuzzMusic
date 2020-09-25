@@ -11,6 +11,10 @@
                 <span class="glyphicon glyphicon-bell" @click="playBtn" :style="playChangeStyle"></span>
                 <span class="glyphicon glyphicon-forward" @click="forwardSong"></span>
                 <span class="glyphicon glyphicon-comment" @click="openCom" :style="comChangeStyle"></span>
+                <span>
+                    <span v-if="this.$store.state.isFavorite" class="glyphicon glyphicon-heart"></span>
+                    <span v-else class="glyphicon glyphicon-heart-empty"></span>
+                </span>
                 <span class="glyphicon glyphicon-volume-down" @click="VolShow"></span>
                 <div v-if="isVol" id="volP" ref="volwidth1"  @click="changeVol($event)" class="progress">
                     <div class="progress-bar" ref="volwidth2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width: VolWidth*2+'%'}">
@@ -84,6 +88,13 @@ export default {
                     this.$store.commit('changeIndex',this.cindex)
                     this.$store.dispatch('getcuUrl',this.cUrl)
                     this.$store.dispatch('getsonginfo',this.cUrl)
+                    for(let item of this.$store.state.favoriteList){
+                        if( this.cUrl == item ){
+                            this.$store.state.isFavorite = true
+                        } else {
+                            this.$store.state.isFavorite = false
+                        }
+                    }
                     
                 }
                 console.log('播放时间为：'+this.$refs.player.currentTime)
@@ -164,6 +175,12 @@ export default {
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
+            this.$store.commit('checkFavorite',false)
+            for(let item of this.$store.state.favoriteList){
+                if( this.cUrl == item ){
+                    this.$store.commit('checkFavorite',true)
+                }
+            }
         },
         forwardSong() {
             this.cindex = this.$store.state.cindex
@@ -176,6 +193,12 @@ export default {
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
+            this.$store.commit('checkFavorite',false)
+            for(let item of this.$store.state.favoriteList){
+                if( this.cUrl == item ){
+                    this.$store.commit('checkFavorite',true)
+                }
+            }
         },
         openCom() {
             
@@ -231,7 +254,7 @@ export default {
        width: 50px; 
        height: 12px;
        position: relative;
-       left: 170px;
+       left: 285px;
        top: -26px;
     }
     #progress{
