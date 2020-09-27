@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="com">
         <div id="comment" class="list-group">
             <a v-for="(item,index) in conList.hotComments" class="list-group-item list-group-item-success" :class="colorClass[index%4]">
                 <h3>{{item.user.nickname}}</h3>
@@ -37,8 +37,8 @@ export default {
 <style lang="less" scoped>
     #comment{
         margin-top: 40px;
-        width: inherit;
-        height: 340px;
+        width: 600px;
+        height: 482px;
         overflow: auto;
         &::-webkit-scrollbar{
             display: none;
@@ -46,13 +46,10 @@ export default {
         h3{
             font-weight: 700;
         }
-        img{
-            width: 25px;
-            height: 25px;
-            background: #fff;
-            border-radius: 25px;
-            overflow: hidden;
-            
-        }
+        
+    }
+    #com{
+        width: 600px;
+        height: 482px;
     }
 </style>

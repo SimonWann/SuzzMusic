@@ -51,10 +51,13 @@ export default {
 #songs{
     margin-top: 40px;
     width: inherit;
-    height: 340px;
+    height: 482px;
     overflow: auto;
     &::-webkit-scrollbar{
         display: none;
+    }
+    h3{
+        font-weight: 700;
     }
 }
 </style>

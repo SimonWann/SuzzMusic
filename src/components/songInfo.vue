@@ -3,9 +3,10 @@
     
     <div id="songid">
         <img :src="this.$store.state.currentS.al && this.$store.state.currentS.al.picUrl" alt="">
-        <div class="alert alert-success" role="alert" id="lyric">
+        <div class="alert alert-success" ref="lyric" role="alert" id="lyric">
+            
             <div>
-                <p v-for="(item,index) in sentence" ref="lyr" >{{item.sen}}</p>
+                <p v-for="(item,index) in sentence" ref="lyr">{{item.sen}}</p>
             </div>
             
         </div>
@@ -24,7 +25,8 @@ export default {
             eachExp: /\d+:\d/g,
             interviala: -1,
             cntb: 0,
-            sentenceExp: /\[.*/g
+            sentenceExp: /\[.*/g,
+            tops: 0
         }
     },
     computed: {
@@ -33,6 +35,10 @@ export default {
                 return  '[00:00.000] 纯音乐，请欣赏～'
             }
             return this.$store.state.cSong.lyric.lyric
+        },
+        currentTime(){
+            
+            return this.$store.state.cSong.currentTime
         },
         songtime() {
             if( !this.lyric) {
@@ -81,7 +87,12 @@ export default {
         
     },
     methods: {
-
+        topadd(item,index) {
+            if(item.time){
+                return (item.time[0]+2>= this.currentTime >= item[0].time) 
+            }
+            
+        }
     }
 }
 </script>
@@ -112,8 +123,9 @@ export default {
         }
         #lyric{
             height: inherit;
-            width: 500px;
+            width: 490px;
             height: 61px;
+            margin-right: 10px;
             margin-left: 33px;
             padding-left: 60px;
             overflow: auto;

@@ -30,6 +30,8 @@ export default {
     width:600px;
     height: 800px;
     margin: 0 auto;
-    
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
 </style>

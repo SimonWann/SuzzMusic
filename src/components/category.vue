@@ -63,11 +63,11 @@ export default {
         display: flex;
         flex-wrap: wrap;
         a{
-            padding: 25px;
+            padding: 20px;
             
         }
         // border: 1px solid #000;
-        height: 150px;
+        height: 130px;
         overflow: auto;
         &::-webkit-scrollbar{
             display: none;
