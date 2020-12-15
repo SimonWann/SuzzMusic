@@ -27,8 +27,8 @@ export default {
 </script>
 <style lang="less">
   #app{
-    width:600px;
-    height: 800px;
+    width: 400px;
+    height: 720px;
     margin: 0 auto;
     &::-webkit-scrollbar{
       display: none;

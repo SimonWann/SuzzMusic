@@ -17,6 +17,8 @@ export default new Vuex.Store({
     },
     isPlay: false,
     cSong: {
+      id: '',
+      name: '',
       currentTime: 0,
       duration: 180,
       src: '',
@@ -46,8 +48,14 @@ export default new Vuex.Store({
   mutations: {
     login(state,payload) {
       // console.log(payload)
-      this.state.isLogin = true,
-      this.state.profile = payload.data.profile,
+      // console.log(payload)
+      this.state.isLogin = true
+      if(!payload.data.account){
+        this.state.isLogin = false
+        alert('用户名或密码错误')
+      }
+      
+      this.state.profile = payload.data.profile
       this.state.userInfo = payload.data.account
       // console.log('111')
     },
@@ -68,7 +76,18 @@ export default new Vuex.Store({
       state.songList = payload.data
     },
     detailSong(state,payload) {
-      console.log(payload)
+      let temp
+      // console.log(payload.data)
+      if(payload.data.result) {
+        temp = payload.data.result.songs
+        payload.data.songs = temp.map((value, index) => {
+          value.alia = value.alias
+          value.al = value.album
+          value.ar = value.artists
+          value.al.picUrl = value.ar[0].img1v1Url
+          return value
+        })
+      }
       state.sdetaillist = payload.data.songs
     },
     changeUrl(state,payload) {
@@ -77,7 +96,8 @@ export default new Vuex.Store({
       state.isPlay = true
     },
     currentSong(state,payload) {
-      console.log(payload)
+      // console.log(payload)
+      state.cSong.id = payload.id
       state.currentS = payload
     },
     changeLyric(state,payload) {
@@ -91,7 +111,7 @@ export default new Vuex.Store({
       state.Ended = payload
     },
     changeIndex(state,payload) {
-      console.log(payload)
+      // console.log(payload)
       state.cindex = payload
     },
     toggleCom(state,payload){
@@ -100,7 +120,7 @@ export default new Vuex.Store({
         comments: payload.data.comments,
         hotComments: payload.data.hotComments
       }
-      console.log(state.comList)
+      // console.log(state.comList)
     },
     updateDaily(state,payload){
       state.dailySong = payload.data.data.dailySongs
@@ -108,11 +128,14 @@ export default new Vuex.Store({
     },
     updateFavorite(state,payload) {
       state.favoriteList = payload.data.ids
-      console.log(state.favoriteList)
+      // console.log(state.favoriteList)
     },
     checkFavorite(state,payload) {
-      console.log('favorite:'+payload)
+      // console.log('favorite:'+payload)
       state.isFavorite = payload
+    },
+    changeName(state, payload) {
+      this.state.cSong.name = payload
     }
   },
   actions: {
@@ -148,9 +171,12 @@ export default new Vuex.Store({
           context.commit('allistChange',resolve)
         })
       })
+    }).catch(err => {
+      alert('用户名或密码错误')
     })
     },
     getAlList(context,payload) {
+      console.log(payload)
       instance1({
         url: '/playlist/detail',
         params: {
@@ -177,7 +203,8 @@ export default new Vuex.Store({
       })
     },
     getcuUrl(context,payload) {
-      // console.log(typeof(payload))
+      console.log(payload.id)
+      
       instance1({
         url: '/song/url',
         params: {
@@ -224,7 +251,71 @@ export default new Vuex.Store({
       })
     },
     getFavoriteSong(context,payload) {
-      
+
+    },
+    likeSong(context,payload) {
+      return new Promise((resolve, reject) => {
+        // console.log(context.state.cSong.id)
+        instance1({
+          url: '/like',
+          params: {
+            id: context.state.cSong.id
+          }
+        }).then(data => {
+          context.state.isFavorite = true
+          resolve(data)
+        })
+      }) 
+    },
+    search(context, payload) {
+      return new Promise((resolve, reject) => {
+        instance1({
+          url: '/search',
+          params: {
+            keywords: payload
+          }
+        }).then(data => {
+          context.commit('detailSong', data)
+          resolve(data)
+        })
+      })
+    },
+    hotMenu(context, payload) {
+      return new Promise((resolve, reject) => {
+        console.log('123')
+        instance1({
+          url: '/top/playlist',
+          params: {
+            
+          }
+        }).then(data => {
+          console.log(data)
+          instance1({
+            url: '/playlist/detail',
+            params: {
+              id: data.data.playlists[0].id
+            }
+          }).then(resolve1 => {
+            context.commit('changSong',resolve1)
+            return new Promise((resolve) => {
+              context.state.ids.length = 0
+              // console.log(resolve1)
+              context.state.ids = resolve1.data.privileges.map((current,index) => {
+                return current.id
+              })
+              // console.log(context.state.ids);
+              instance1({
+                url: 'song/detail',
+                params: {
+                  ids: context.state.ids.toString()
+                }
+              }).then((resolve => {
+                context.commit('detailSong',resolve)
+              }))
+            })
+          })
+        })
+      })
     }
     
   },

@@ -33,9 +33,10 @@ export default {
             console.log(index)
             this.$store.commit('changeIndex',index)
             this.cindex = index
+            this.$store.commit('changeName', item.name)
             this.$store.commit('currentSong',this.$store.state.sdetaillist[this.cindex])
             this.cUrl = this.$store.state.sdetaillist[this.cindex].id
-            this.$store.dispatch('getcuUrl',this.cUrl)
+            this.$store.dispatch('getcuUrl', this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
             this.$store.commit('checkFavorite',false)
             for(let item of this.$store.state.favoriteList){
@@ -49,7 +50,7 @@ export default {
 </script>
 <style lang="less" scoped>
 #songs{
-    margin-top: 40px;
+    margin-top: 20px;
     width: inherit;
     height: 482px;
     overflow: auto;

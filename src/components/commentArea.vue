@@ -36,7 +36,7 @@ export default {
 </script>
 <style lang="less" scoped>
     #comment{
-        margin-top: 40px;
+        margin-top: 20px;
         width: 600px;
         height: 482px;
         overflow: auto;

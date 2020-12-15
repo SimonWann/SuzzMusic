@@ -7,13 +7,13 @@
             <audio id="player1" ref="player" @canplay="playN" @play.once="autoMusicP" :src="this.$store.state.currentUrl"></audio>
             
             <div id="control">
-                <span class="glyphicon glyphicon-backward" @click="backSong"></span>
-                <span class="glyphicon glyphicon-bell" @click="playBtn" :style="playChangeStyle"></span>
-                <span class="glyphicon glyphicon-forward" @click="forwardSong"></span>
+                <span class="glyphicon glyphicon-minus-sign" @click="backSong"></span>
+                <span class="glyphicon glyphicon-play" @click="playBtn" :style="playChangeStyle"></span>
+                <span class="glyphicon glyphicon-plus-sign" @click="forwardSong"></span>
                 <span class="glyphicon glyphicon-comment" @click="openCom" :style="comChangeStyle"></span>
                 <span>
-                    <span v-if="this.$store.state.isFavorite" class="glyphicon glyphicon-heart"></span>
-                    <span v-else class="glyphicon glyphicon-heart-empty"></span>
+                    <span v-if="this.$store.state.isFavorite" @click="notLike" class="glyphicon glyphicon-heart"></span>
+                    <span v-else @click="beLike" class="glyphicon glyphicon-heart-empty"></span>
                 </span>
                 <span class="glyphicon glyphicon-volume-down" @click="VolShow"></span>
                 <div v-if="isVol" id="volP" ref="volwidth1"  @click="changeVol($event)" class="progress">
@@ -55,7 +55,8 @@ export default {
             VolWidth: 0,
             isVol: false,
             p: 0,
-            cindex: 0
+            cindex: 0,
+            orLike: false
         }
     },
     computed: {
@@ -203,13 +204,25 @@ export default {
         openCom() {
             
             this.$store.dispatch('getCom',this.$store.state.sdetaillist[this.$store.state.cindex].id)
+        },
+        beLike() {
+            console.log('click')
+            this.orLike = true
+            this.$store.dispatch('likeSong', this.orLike)
+            .then(data => {
+                console.log(data)
+            })
+        },
+        notLike() {
+            this.orLike = false
+            this.$store.dispatch('likeSong', this.orLike)
         }
     }
 }
 </script>
 <style lang="less" scoped>
     #control{
-        width: 500px;
+        width: 300px;
         height: 88px;
         background: #d9534f;
         font-size: 25px;
@@ -242,7 +255,7 @@ export default {
     }
     
     #main{
-        width: 600px;
+        width: 400px;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -259,7 +272,7 @@ export default {
     }
     #progress{
         height: 30px;
-        margin: 30px 0px 15px 0px;
+        margin: 20px 0px 0px 0px;
         display: flex;
         flex-wrap: nowrap;
         justify-content: center;

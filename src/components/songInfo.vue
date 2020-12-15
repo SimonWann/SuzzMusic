@@ -5,7 +5,8 @@
         <img :src="this.$store.state.currentS.al && this.$store.state.currentS.al.picUrl" alt="">
         <div class="alert alert-success" ref="lyric" role="alert" id="lyric">
             
-            <div>
+            <div id="box1" ref="lyricBox">
+                <h3 id="sname">{{name}}</h3>
                 <p v-for="(item,index) in sentence" ref="lyr">{{item.sen}}</p>
             </div>
             
@@ -17,8 +18,7 @@
 export default {
     data: function() {
         return {
-            // currentTime: this.$store.state.cSong.currentTime,
-            // duration: this.$store.state.cSong.duration,
+            
             timeExp: /\[\d+:\d+\.\d+\]+/g,
             fitstE: /\n/,
             top1: 0,
@@ -26,19 +26,50 @@ export default {
             interviala: -1,
             cntb: 0,
             sentenceExp: /\[.*/g,
-            tops: 0
+            tops: 0,
+            node: 0,
+            i: 1,
+            timer: -1,
+            switch: false
         }
     },
+    // created() {
+    //     this.timer = setInterval(() =>{
+    //         console.log(this.sentence[this.i].time[0],this.currentTime, this.node)
+    //         console.log(this.sentence[this.i].time[0],this.sentence[this.i-1].time[0],this.switch,'i:i-1:switch')
+    //         if( this.sentence[this.i].time && this.currentTime > this.sentence[this.i].time[0] ) {
+    //             if(Math.abs(this.sentence[this.i].time[0] - this.sentence[this.i - 1].time[0]) >= 5) {
+    //                 this.animation(this.sentence[this.i].time[0], this.node)
+    //                 this.i++
+    //             }
+                
+    //         }
+    //         if(this.switch === true) {
+    //             this.i = 1
+    //             this.node = 0
+    //             this.switch = false
+    //         }
+    //     }, 1000)
+    // },
     computed: {
+        name() {
+            if(!this.$store.state.cSong.name){
+                return ''
+            }
+            return this.$store.state.cSong.name
+        },
         lyric() {
             if(!this.$store.state.cSong.lyric){
                 return  '[00:00.000] 纯音乐，请欣赏～'
             }
+            this.switch = true
             return this.$store.state.cSong.lyric.lyric
         },
-        currentTime(){
-            
-            return this.$store.state.cSong.currentTime
+        currentTime() {
+            return parseInt(this.$store.state.cSong.currentTime)
+        },
+        duration() {
+            return this.$store.state.cSong.duration
         },
         songtime() {
             if( !this.lyric) {
@@ -87,11 +118,18 @@ export default {
         
     },
     methods: {
-        topadd(item,index) {
-            if(item.time){
-                return (item.time[0]+2>= this.currentTime >= item[0].time) 
-            }
-            
+        animation(limit) {
+            limit = -limit*17.5
+            let post = this.node
+            console.log(this.$refs.lyricBox)
+            let timer2 = setInterval(() => {
+                post = post - 0.5
+                this.$refs.lyricBox.style.top = post + 'px'
+                if(post <= limit) {
+                    clearInterval(timer2)
+                    this.node = post
+                }
+            }, 30)
         }
     }
 }
@@ -100,17 +138,22 @@ export default {
     #songInfo{
         // border: 1px solid #000;
         
-        height: 100px;
+        height: 90px;
         width: 600px;
 
     }
-    
+    #sname{
+        padding: 0px 5px;
+        font-weight: 700;
+    }
     #songid{
         overflow: hidden;
         
         display: flex;
         flex-wrap: nowrap;
-        
+        #box1{
+            position: relative;
+        }
         img{
             margin-left: 7px;
             border-radius: 7px;
