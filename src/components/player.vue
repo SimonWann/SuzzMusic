@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="$store.state.isLogin" id="userInfo">
+            <div v-if="$store.state.isLogin" id="userInfo" class="userInfo2">
                 <img id="avator" :src="$store.state.profile.avatarUrl" />
             </div>
             <div v-else id="userInfo">
@@ -86,6 +86,7 @@ export default {
                     }
                     this.$store.commit('currentSong',this.$store.state.sdetaillist[this.cindex])
                     this.cUrl = this.$store.state.sdetaillist[this.cindex].id
+                    this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
                     this.$store.commit('changeIndex',this.cindex)
                     this.$store.dispatch('getcuUrl',this.cUrl)
                     this.$store.dispatch('getsonginfo',this.cUrl)
@@ -139,7 +140,8 @@ export default {
             return this.isVol
         },
         changeSongP(e) {
-            this.p = e.offsetX/5
+            console.log(e.offsetX)
+            this.p = e.offsetX/3
             this.$store.commit('musicP',this.p)
             this.$refs.player.currentTime = this.p/100*this.$refs.player.duration
             console.log(this.p)
@@ -173,6 +175,7 @@ export default {
             }
             this.$store.commit('currentSong',this.$store.state.sdetaillist[this.cindex])
             this.cUrl = this.$store.state.sdetaillist[this.cindex].id
+            this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
@@ -189,8 +192,10 @@ export default {
             if(this.cindex >= this.$store.state.sdetaillist.length){
                 this.cindex = 0
             }
+            
             this.$store.commit('currentSong',this.$store.state.sdetaillist[this.cindex])
             this.cUrl = this.$store.state.sdetaillist[this.cindex].id
+            this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
             this.$store.dispatch('getsonginfo',this.cUrl)
@@ -203,7 +208,7 @@ export default {
         },
         openCom() {
             
-            this.$store.dispatch('getCom',this.$store.state.sdetaillist[this.$store.state.cindex].id)
+            this.$store.dispatch('getCom',{id: this.$store.state.sdetaillist[this.$store.state.cindex].id})
         },
         beLike() {
             console.log('click')
@@ -222,13 +227,14 @@ export default {
 </script>
 <style lang="less" scoped>
     #control{
-        width: 300px;
-        height: 88px;
+        width: 370px;
+        height: 68px;
         background: #d9534f;
-        font-size: 25px;
+        font-size: 17px;
         color: lighten(#000, 93.5%);
+        
         span{
-            padding: 10px;
+            padding: 5px;
             &:hover{
                 text-shadow: 1px 1px 5px #6b0b0b;
             }
@@ -238,19 +244,19 @@ export default {
     border-bottom: 1px solid #eccdcd;
     }
     #userInfo{
-        padding: 28px;
+        padding: 18px 0px 18px 18px;
         #avator{
             width: 35px;
             height: 35px;
             background: #fff;
             border-radius: 7px;
             overflow: hidden;
-            border: 1px solid #ce7070;
+            border: 1px solid lighten(#ce7070,15%);
             box-shadow: 1px 1px 1px #6b0b0b;
         }
         background: #d9534f;
         width: 100px;
-        height: 88px;
+        height: 68px;
         border-bottom: 1px solid #eccdcd;
     }
     
@@ -267,8 +273,9 @@ export default {
        width: 50px; 
        height: 12px;
        position: relative;
-       left: 285px;
-       top: -26px;
+       left: 165px;
+       top: -20px;
+       box-shadow: inset 0px 0px 3px #e8e8e8;
     }
     #progress{
         height: 30px;
@@ -278,7 +285,7 @@ export default {
         justify-content: center;
         #progressline{
             height: 14px;
-            width: 500px;
+            width: 300px;
             margin: 0px 12px;
         }
         span{

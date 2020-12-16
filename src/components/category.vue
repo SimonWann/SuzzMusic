@@ -77,7 +77,7 @@ export default {
         searchNow() {
             this.$store.dispatch('search', this.info)
             .then((data) => {
-                
+                this.isSearchAcitive = false
             })
         }
     }
@@ -88,6 +88,7 @@ export default {
     #category{
         display: flex;
         flex-wrap: wrap;
+        // margin-left: 5px;
         a{
             padding: 20px;
             
@@ -104,6 +105,7 @@ export default {
     }
     #search1{
         position: absolute;
+        z-index: 1;
         left: 50%;
         top: 50%;
         transform: translateX(-50%) translateY(-50%);

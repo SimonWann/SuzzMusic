@@ -9,6 +9,9 @@
                 <h3>{{item.user.nickname}}</h3>
                 <p>{{item.content}}</p>
             </a>
+            <a id="changePage" href="#" @click.prevent="getCom" class="list-group-item list-group-item-success" >
+                换一页
+            </a>
         </div>
         
     </div>
@@ -21,7 +24,8 @@ export default {
             colorClass: ['list-group-item-success',
                         'list-group-item-info',
                         'list-group-item-warning',
-                        'list-group-item-danger']
+                        'list-group-item-danger'],
+            page: 0
         }
     },
     computed: {
@@ -29,16 +33,25 @@ export default {
             return this.$store.state.comList
         },
     },
-    method: {
+    methods: {
+        getCom() {
+            this.page++
+            if(this.page > 10) {
+                this.page = 0
+            }
+            this.$store.dispatch('getCom',{id:this.$store.state.sdetaillist[this.$store.state.cindex].id, page: this.page})
+        },
+        changePage() {
 
+        }
     }
 }
 </script>
 <style lang="less" scoped>
     #comment{
         margin-top: 20px;
-        width: 600px;
-        height: 482px;
+        width: 400px;
+        height: 378px;
         overflow: auto;
         &::-webkit-scrollbar{
             display: none;
@@ -49,7 +62,10 @@ export default {
         
     }
     #com{
-        width: 600px;
-        height: 482px;
+        width: 400px;
+        height: 378px;
+    }
+    #changePage{
+        text-align: center;
     }
 </style>

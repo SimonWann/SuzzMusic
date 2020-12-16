@@ -54,7 +54,7 @@ export default {
     computed: {
         name() {
             if(!this.$store.state.cSong.name){
-                return ''
+                return '歌词在这儿~'
             }
             return this.$store.state.cSong.name
         },
@@ -138,12 +138,12 @@ export default {
     #songInfo{
         // border: 1px solid #000;
         
-        height: 90px;
-        width: 600px;
+        height: 80px;
+        width: 400px;
 
     }
     #sname{
-        padding: 0px 5px;
+        padding: 0px 0px;
         font-weight: 700;
     }
     #songid{
@@ -166,11 +166,11 @@ export default {
         }
         #lyric{
             height: inherit;
-            width: 490px;
+            width: 300px;
             height: 61px;
             margin-right: 10px;
-            margin-left: 33px;
-            padding-left: 60px;
+            margin-left: 13px;
+            padding-left: 40px;
             overflow: auto;
             &::-webkit-scrollbar{
                 display: none;

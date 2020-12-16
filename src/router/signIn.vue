@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="loginPlace">
         <div id="alertM" class="alert alert-danger" role="alert">
             <form class="form-inline">
             <div class="form-group">
@@ -47,9 +47,15 @@ export default {
 </script>
 <style lang="less" scoped>
     button{
-        margin-left: 50px;
+        margin-left: 0px;
     }
     #alertM{
+        padding: 300px 30px;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
         margin: 0px;
+        position: absolute;
+        top: 50%;
     }
 </style>

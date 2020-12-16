@@ -52,7 +52,7 @@ export default {
 #songs{
     margin-top: 20px;
     width: inherit;
-    height: 482px;
+    height: 378px;
     overflow: auto;
     &::-webkit-scrollbar{
         display: none;

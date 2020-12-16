@@ -115,10 +115,13 @@ export default new Vuex.Store({
       state.cindex = payload
     },
     toggleCom(state,payload){
-      state.isSong = !state.isSong
+      console.log(payload)
+      if(payload.page < 1) {
+        state.isSong = !state.isSong
+      }
       state.comList = {
-        comments: payload.data.comments,
-        hotComments: payload.data.hotComments
+        comments: payload.resolve.data.comments,
+        hotComments: payload.resolve.data.hotComments
       }
       // console.log(state.comList)
     },
@@ -203,8 +206,7 @@ export default new Vuex.Store({
       })
     },
     getcuUrl(context,payload) {
-      console.log(payload.id)
-      
+      console.log(payload)
       instance1({
         url: '/song/url',
         params: {
@@ -226,14 +228,18 @@ export default new Vuex.Store({
       })
     },
     getCom(context,payload) {
+      if(!payload.page) {
+        payload.page = 0
+      }
       instance1({
         url: '/comment/music',
         params: {
-          id: payload,
-          limit: 50
+          id: payload.id,
+          limit: 50,
+          offset: payload.page*50
         }
       }).then(resolve1 => {
-        context.commit('toggleCom',resolve1)
+        context.commit('toggleCom',{resolve: resolve1, page: payload.page})
       })
     },
     getDailySong(context,payload) {
