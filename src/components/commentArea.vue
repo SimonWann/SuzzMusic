@@ -48,22 +48,65 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+    @redcolor: #d9534f;
+    @keyframes scroll {
+        from{
+            box-shadow: 0px 0px 3px darken(@redcolor, 20%); 
+            background: darken(@redcolor, 20%); 
+        }
+        to{
+            box-shadow: 0px 0px 7px darken(@redcolor, 20%); 
+            background: darken(@redcolor, -5%); 
+        }
+    }
     #comment{
         margin-top: 20px;
         width: 400px;
         height: 378px;
         overflow: auto;
-        &::-webkit-scrollbar{
-            display: none;
-        }
+        
         h3{
             font-weight: 700;
+        }
+        &::-webkit-scrollbar{
+            height: 10px;
+            width:10px;
+            // border: 1px solid #000;
+            &:hover{
+                // background: #000;
+            }
+        }
+        &::-webkit-scrollbar-tack{
+            border-radius: 10px;
+            border: 1px solid #000;
+            &:hover{
+                background: #000;
+            }
+        }
+        &::-webkit-scrollbar-button{
+            border-radius: 2px;
+            border: 1px solid darken(@redcolor, 70%);
+            box-shadow: 0px 0px 3px darken(@redcolor, 20%); 
+            background: darken(@redcolor, 20%); 
+        }
+        &::-webkit-scrollbar-thumb{
+            border-radius: 3px;
+            border: 1px solid darken(@redcolor, 70%);
+            box-shadow: 0px 0px 3px darken(@redcolor, 20%); 
+            background: darken(@redcolor, 20%); 
+            &:hover{
+                
+                animation: scroll 1s;
+            }
+            
         }
         
     }
     #com{
         width: 400px;
         height: 378px;
+        overflow: hidden;
+        
     }
     #changePage{
         text-align: center;

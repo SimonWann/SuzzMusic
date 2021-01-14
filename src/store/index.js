@@ -15,6 +15,7 @@ export default new Vuex.Store({
     profile: {
       
     },
+    isLoading: false,
     isPlay: false,
     cSong: {
       id: '',
@@ -57,6 +58,7 @@ export default new Vuex.Store({
       
       this.state.profile = payload.data.profile
       this.state.userInfo = payload.data.account
+      
       // console.log('111')
     },
     playMusic(state) {
@@ -71,6 +73,7 @@ export default new Vuex.Store({
     },
     allistChange(state,payload) {
       state.allist = payload.data
+      state.isLoading = false
     },
     changSong(state,payload){
       state.songList = payload.data
@@ -89,30 +92,39 @@ export default new Vuex.Store({
         })
       }
       state.sdetaillist = payload.data.songs
+      state.isLoading = false
     },
     changeUrl(state,payload) {
       // console.log(payload)
       state.currentUrl = payload.data.data[0].url
       state.isPlay = true
+      state.isLoading = false
     },
     currentSong(state,payload) {
       // console.log(payload)
       state.cSong.id = payload.id
       state.currentS = payload
+      state.isLoading = false
+
     },
     changeLyric(state,payload) {
       // console.log(payload.data)
       state.cSong.lyric = payload.data.lrc
+      state.isLoading = false
+      
     },
     changeDis(state,payload) {
       state.lyricDis = payload
+      
     },
     songEnded(state,payload) {
       state.Ended = payload
+      
     },
     changeIndex(state,payload) {
       // console.log(payload)
       state.cindex = payload
+      
     },
     toggleCom(state,payload){
       console.log(payload)
@@ -124,6 +136,7 @@ export default new Vuex.Store({
         hotComments: payload.resolve.data.hotComments
       }
       // console.log(state.comList)
+      state.isLoading = false
     },
     updateDaily(state,payload){
       state.dailySong = payload.data.data.dailySongs
@@ -131,18 +144,22 @@ export default new Vuex.Store({
     },
     updateFavorite(state,payload) {
       state.favoriteList = payload.data.ids
+     
       // console.log(state.favoriteList)
     },
     checkFavorite(state,payload) {
       // console.log('favorite:'+payload)
       state.isFavorite = payload
+      
     },
     changeName(state, payload) {
       this.state.cSong.name = payload
+      state.isLoading = false
     }
   },
   actions: {
     submitLogin(context,payload) {
+      context.state.isLoading = true
       instance1({
         url: '/login/cellphone',
         params: payload
@@ -180,6 +197,7 @@ export default new Vuex.Store({
     },
     getAlList(context,payload) {
       console.log(payload)
+      context.state.isLoading = true
       instance1({
         url: '/playlist/detail',
         params: {
@@ -207,6 +225,7 @@ export default new Vuex.Store({
     },
     getcuUrl(context,payload) {
       console.log(payload)
+      context.state.isLoading = true
       instance1({
         url: '/song/url',
         params: {
@@ -218,6 +237,7 @@ export default new Vuex.Store({
       
     },
     getsonginfo(context,payload) {
+      context.state.isLoading = true
       instance1({
         url: '/lyric',
         params: {
@@ -231,6 +251,7 @@ export default new Vuex.Store({
       if(!payload.page) {
         payload.page = 0
       }
+      context.state.isLoading = true
       instance1({
         url: '/comment/music',
         params: {
@@ -247,6 +268,7 @@ export default new Vuex.Store({
       context.state.ids = context.state.dailySong.map((current,index) => {
         return current.id
       })
+      context.state.isLoading = true
       instance1({
         url: 'song/detail',
         params: {
@@ -262,6 +284,7 @@ export default new Vuex.Store({
     likeSong(context,payload) {
       return new Promise((resolve, reject) => {
         // console.log(context.state.cSong.id)
+        context.state.isLoading = true
         instance1({
           url: '/like',
           params: {
@@ -275,6 +298,7 @@ export default new Vuex.Store({
     },
     search(context, payload) {
       return new Promise((resolve, reject) => {
+        context.state.isLoading = true
         instance1({
           url: '/search',
           params: {
@@ -288,6 +312,7 @@ export default new Vuex.Store({
     },
     hotMenu(context, payload) {
       return new Promise((resolve, reject) => {
+        context.state.isLoading = true
         console.log('123')
         instance1({
           url: '/top/playlist',

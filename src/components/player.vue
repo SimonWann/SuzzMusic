@@ -17,7 +17,7 @@
                 </span>
                 <span class="glyphicon glyphicon-volume-down" @click="VolShow"></span>
                 <div v-if="isVol" id="volP" ref="volwidth1"  @click="changeVol($event)" class="progress">
-                    <div class="progress-bar" ref="volwidth2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width: VolWidth*2+'%'}">
+                    <div id="volP2" class="progress-bar" ref="volwidth2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width: VolWidth*2+'%'}">
                         <span class="sr-only">60% Complete</span>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
             <span id="ctime">{{parseInt(currentTime/60)}}:{{parseInt(currentTime%60)}}</span>
             <div @click="changeSongP" id="progressline" class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" :style="{width: parseInt(this.$store.state.cSong.currentTime/this.$store.state.cSong.duration*100) + '%'}">
-                    
                 </div>
+                <button id="dragBtn"  :style="{left: dragBtnLeft+'px'}" ></button>
             </div>
             <span id="ttime">{{parseInt(duration/60)}}:{{parseInt(duration%60)}}</span>
         </div>
@@ -52,11 +52,13 @@ export default {
             playStyle2: {
                 textShadow: ''
             },
-            VolWidth: 0,
+            VolWidth: 100,
             isVol: false,
             p: 0,
             cindex: 0,
-            orLike: false
+            orLike: false,
+            dragBtnLeft: 0,
+            timer: true
         }
     },
     computed: {
@@ -140,11 +142,24 @@ export default {
             return this.isVol
         },
         changeSongP(e) {
-            console.log(e.offsetX)
-            this.p = e.offsetX/3
-            this.$store.commit('musicP',this.p)
-            this.$refs.player.currentTime = this.p/100*this.$refs.player.duration
-            console.log(this.p)
+            
+            if(this.timer){
+                this.timer = false
+                setTimeout(() => {
+                    this.timer = true
+                    console.log(e.offsetX)
+                    this.p = e.offsetX/3
+                    this.$store.commit('musicP',this.p)
+                    this.$refs.player.currentTime = this.p/100*this.$refs.player.duration
+                    console.log(this.p)
+                    
+                }, 30);
+            }else {
+                console.log('false')
+                return
+            }
+            
+            
         },
         autoMusicP() {
             setInterval(() =>{
@@ -221,11 +236,35 @@ export default {
         notLike() {
             this.orLike = false
             this.$store.dispatch('likeSong', this.orLike)
+        },
+        moveDragBtn() {
+            console.log('ss')
         }
     }
 }
 </script>
 <style lang="less" scoped>
+    @keyframes btnColor {
+        from{
+            box-shadow: 0px 0px 3px darken(@redcolor, 20%); 
+            background: darken(@redcolor, 20%); 
+        }
+        to{
+            box-shadow: 0px 0px 7px darken(@redcolor, 20%); 
+            background: darken(@redcolor, -5%); 
+        }
+    }
+    @keyframes volColor {
+        from{
+            box-shadow: 0px 0px 3px darken(@redcolor, 20%); 
+            
+        }
+        to{
+            box-shadow: 0px 0px 7px darken(@redcolor, 20%); 
+            
+        }
+    }
+    @redcolor: #d9534f;
     #control{
         width: 370px;
         height: 68px;
@@ -251,8 +290,8 @@ export default {
             background: #fff;
             border-radius: 7px;
             overflow: hidden;
-            border: 1px solid lighten(#ce7070,15%);
-            box-shadow: 1px 1px 1px #6b0b0b;
+            border: 1px solid darken(@redcolor, 30%);
+            box-shadow: 0px 0px 3px darken(@redcolor, 10%);
         }
         background: #d9534f;
         width: 100px;
@@ -270,12 +309,27 @@ export default {
         position: relative;
     }
     #volP{
-       width: 50px; 
-       height: 12px;
-       position: relative;
-       left: 165px;
-       top: -20px;
-       box-shadow: inset 0px 0px 3px #e8e8e8;
+        #volP2{
+            background: darken(@redcolor, 20%);
+            &:hover{
+                    animation: btnColor 0.3s;
+                    animation-fill-mode: forwards;
+                    animation-timing-function: ease-out;
+                }
+        }
+        width: 50px; 
+        height: 14px;
+        position: relative;
+        left: 165px;
+        top: -20px;
+        box-shadow: inset 0px 0px 3px #e8e8e8;
+        border: 1px solid darken(@redcolor, 70%);
+        box-shadow: 0px 0px 3px darken(@redcolor, 20%);
+        &:hover{
+                    animation: volColor 0.3s;
+                    animation-fill-mode: forwards;
+                    animation-timing-function: ease-out;
+                }
     }
     #progress{
         height: 30px;
@@ -287,10 +341,33 @@ export default {
             height: 14px;
             width: 300px;
             margin: 0px 12px;
+            overflow: visible;
+            white-space: nowrap;
+            #dragBtn{
+                position: relative;
+                top: -1px;
+                left: 0px;
+                background: darken(@redcolor, 20%);
+                transform: translateX(-50%);
+                width: 15px;
+                height: 17px;
+                border: 1px solid darken(@redcolor, 70%);
+                border-radius: 9px;
+                box-shadow: 0px 0px 3px darken(@redcolor, 20%);
+                outline: none;
+                
+                &:hover{
+                    animation: btnColor 0.3s;
+                    animation-fill-mode: forwards;
+                    animation-timing-function: ease-out;
+                }
+                
+            }
         }
         span{
             line-height: 17px;
         }
+
             
     }
 </style>

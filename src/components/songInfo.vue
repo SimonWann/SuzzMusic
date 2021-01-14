@@ -7,7 +7,7 @@
             
             <div id="box1" ref="lyricBox">
                 <h3 id="sname">{{name}}</h3>
-                <p v-for="(item,index) in sentence" ref="lyr">{{item.sen}}</p>
+                <p rel="lyrDom" v-for="(item,index) in sentence" ref="lyr">{{item.sen}}</p>
             </div>
             
         </div>
@@ -30,27 +30,10 @@ export default {
             node: 0,
             i: 1,
             timer: -1,
-            switch: false
+            switch: false,
+            cnt: 0
         }
     },
-    // created() {
-    //     this.timer = setInterval(() =>{
-    //         console.log(this.sentence[this.i].time[0],this.currentTime, this.node)
-    //         console.log(this.sentence[this.i].time[0],this.sentence[this.i-1].time[0],this.switch,'i:i-1:switch')
-    //         if( this.sentence[this.i].time && this.currentTime > this.sentence[this.i].time[0] ) {
-    //             if(Math.abs(this.sentence[this.i].time[0] - this.sentence[this.i - 1].time[0]) >= 5) {
-    //                 this.animation(this.sentence[this.i].time[0], this.node)
-    //                 this.i++
-    //             }
-                
-    //         }
-    //         if(this.switch === true) {
-    //             this.i = 1
-    //             this.node = 0
-    //             this.switch = false
-    //         }
-    //     }, 1000)
-    // },
     computed: {
         name() {
             if(!this.$store.state.cSong.name){
@@ -66,6 +49,7 @@ export default {
             return this.$store.state.cSong.lyric.lyric
         },
         currentTime() {
+            this.isDisplay()
             return parseInt(this.$store.state.cSong.currentTime)
         },
         duration() {
@@ -118,20 +102,17 @@ export default {
         
     },
     methods: {
-        animation(limit) {
-            limit = -limit*17.5
-            let post = this.node
-            console.log(this.$refs.lyricBox)
-            let timer2 = setInterval(() => {
-                post = post - 0.5
-                this.$refs.lyricBox.style.top = post + 'px'
-                if(post <= limit) {
-                    clearInterval(timer2)
-                    this.node = post
-                }
-            }, 30)
+        isDisplay() {
+            console.log('s')
+            if(this.currentTime > cnt){
+                this.cnt++
+                this.$refs.lyrDom.offsetTop -= 14
+            }
+            if(this.duration - this.currentTime <= 1) {
+                this.cnt = 0
+            }
         }
-    }
+    }   
 }
 </script>
 <style lang="less" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    
+    <loading></loading>
     <player></player>
     <song-info></song-info>
     <category></category>
@@ -14,6 +14,7 @@ import songInfo from './components/songInfo'
 import category from './components/category'
 import song from './components/song'
 import commentArea from './components/commentArea'
+import loading from './components/loading'
 
 export default {
   components: {
@@ -21,7 +22,8 @@ export default {
     songInfo,
     category,
     song,
-    commentArea
+    commentArea,
+    loading
   }
 }
 </script>
