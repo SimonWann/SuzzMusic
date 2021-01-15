@@ -5,7 +5,40 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build:linux": "electron-builder -l tar.xz deb rpm AppImage pacman"
+  },
+  "build": {
+    "productName": "SuzzMusic",
+    "appId": "com.github.simonwann.suzzmusic",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/electron/**/*",
+      "build/icons/*"
+    ],
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons",
+      "category": "AudioVideo;Audio;Player;Music;"
+    },
+    "pacman": {
+      "depends": [
+        "gconf",
+        "libnotify",
+        "nss",
+        "libxss",
+        "libappindicator-gtk3",
+        "libxtst"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "dependencies": {
     "axios": "^0.21.1",

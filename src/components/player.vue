@@ -91,7 +91,12 @@ export default {
                     this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
                     this.$store.commit('changeIndex',this.cindex)
                     this.$store.dispatch('getcuUrl',this.cUrl)
-                    this.$store.dispatch('getsonginfo',this.cUrl)
+                    this.$store.dispatch('getsonginfo',this.cUrl).then(() => {
+                        new Notification(this.$store.state.currentS.name,{
+                            body: this.$store.state.currentS.ar[0].name,
+                            icon: this.$store.state.currentS.al.picUrl
+                        })
+                    })
                     for(let item of this.$store.state.favoriteList){
                         if( this.cUrl == item ){
                             this.$store.state.isFavorite = true
@@ -193,7 +198,12 @@ export default {
             this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
-            this.$store.dispatch('getsonginfo',this.cUrl)
+            this.$store.dispatch('getsonginfo',this.cUrl).then(() => {
+                        new Notification(this.$store.state.currentS.name,{
+                            body: this.$store.state.currentS.ar[0].name,
+                            icon: this.$store.state.currentS.al.picUrl
+                        })
+                    })
             this.$store.commit('checkFavorite',false)
             for(let item of this.$store.state.favoriteList){
                 if( this.cUrl == item ){
@@ -213,7 +223,12 @@ export default {
             this.$store.commit('changeName', this.$store.state.sdetaillist[this.cindex].name)
             this.$store.commit('changeIndex',this.cindex)
             this.$store.dispatch('getcuUrl',this.cUrl)
-            this.$store.dispatch('getsonginfo',this.cUrl)
+            this.$store.dispatch('getsonginfo',this.cUrl).then(() => {
+                        new Notification(this.$store.state.currentS.name,{
+                            body: this.$store.state.currentS.ar[0].name,
+                            icon: this.$store.state.currentS.al.picUrl
+                        })
+                    })
             this.$store.commit('checkFavorite',false)
             for(let item of this.$store.state.favoriteList){
                 if( this.cUrl == item ){
